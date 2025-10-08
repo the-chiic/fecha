@@ -1,53 +1,45 @@
 <?php
-    class Funciones{
-        private int $dia;
-        private int $mes;
-        private int $año;
-
+    class Funcioness{
+        private $dia;
+        private $mes;
+        private $año;
         private $array=[
                     1=>["Enero"=>31], 2=>["Febrero"=>28], 3=>["Marzo"=>31], 4=>["Abril"=>30], 5=>["Mayo"=>31],
                     6=>["Junio"=>30], 7=>["Julio"=>31], 8=>["Agosto"=>31], 9=>["Septiembre"=>30],
                     10=>["Octubre"=>31], 11=>["Noviembre"=>30], 12=>["Diciembre"=>31]
                 ];
 
-        public function __construct(int $dia, int $mes, int $año) {
-            $this->dia=$dia;
-            $this->mes=$mes;
-            $this->año=$año;
+        public function modificarFecha($fechaString){
 
-            $this->bisiesto();
+            list($this->dia,$this->mes,$this->año)=explode("/",$fechaString);  //Separa una palabra con el separador que le indiques
+
+            $dia=(int)$this->dia;
+            $mes=(int)$this->mes;
+            $año=(int)$this->año;
+
+            if($this->validarDia()==false || $this->validarMes()==false || $this->validarAño()==false){ //Valido que sean fechas correctas
+                return "Fecha No Válida";
+            }
+
+            $nombreMes=array_key_first($this->array[$mes]); //Devuelve la primera parte del array de dentro
+            
+            if($this->bisiesto()==true && $mes==2){       //Compruebo si es año bisiesto y si el mes es febrero
+                $this->array[$mes][$nombreMes]=29;
+                $diasMes=$this->array[$mes][$nombreMes];                                //Para añadir un día más
+                return "Fecha: ".$this->dia."/".$nombreMes."/".$this->año."<br/>Días en ese Mes (Bisiesto): ".$diasMes;
+            }else{
+                $diasMes=$this->array[$mes][$nombreMes];
+                return "Fecha: ".$this->dia."/".$nombreMes."/".$this->año."<br/>Días en ese Mes: ".$diasMes;
+            }
+
         }
-
-        private function bisiesto(){
+        private function bisiesto(): bool{
             if(($this->año%4==0 && $this->año%100!=0) || $this->año%4==0){
                 $bisiesto=true;
-            }else{
-                $bisiesto=false;
+                return $bisiesto;
             }
-
-            $sw=0;
-            foreach($this->array as $mes=>$datos){                //Recorro el array para el indice del mes tengo 2 datos
-                foreach ($datos as $nombreMes=>$dia) {            //Y para los datos por cada nombre del mes se encuentra los dias que tiene
-                    if($this->validarDia()==true && $this->validarMes()==true && $this->validarAño()==true){ //Valido que sean fechas correctas
-                        $sw=1;
-                        if($this->mes==$mes){                           //Compruebo si el mes se encuentra en el array
-                            $mesNombre=$nombreMes;                      //Si existe cambio su numero por el nombre del mes
-                            if($bisiesto==true && $mes==2){     //Compruebo si es año bisiesto y si el mes es febrero
-                                $dia++;                         //Para añadir un día más
-                                echo "Fecha: ".$this->dia."/".$mesNombre."/".$this->año;
-                                echo "<br/>Días en ese Mes (Bisiesto): ".$dia;
-                            }else{
-                                echo "Fecha: ".$this->dia."/".$mesNombre."/".$this->año;
-                                echo "<br/>Días en ese Mes: ".$dia;
-                            }
-                        }
-                    }
-                }
-            }
-
-            if($sw==0){
-                echo "Fecha No Válida";
-            }
+            $bisiesto=false;
+            return $bisiesto;
         }
 
         private function validarAño(){
