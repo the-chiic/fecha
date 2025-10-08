@@ -1,5 +1,5 @@
 <?php
-    class Funcioness{
+    class Funciones{
         private $dia;
         private $mes;
         private $año;
@@ -74,3 +74,4 @@
         }
     }
 ?>
+
