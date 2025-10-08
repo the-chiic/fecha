@@ -5,8 +5,8 @@
 
     $fechaString=$_POST["fecha"];
 
-    list($dd,$mm,$aa)=explode("/",$fechaString);  //Separa una palabra con el separador que le indiques
+    $arrayFecha = new Funciones();
 
-
-    $fecha=new Funciones($dd, $mm, $aa);
+    echo $arrayFecha->modificarFecha(($fechaString));
 ?>
+
